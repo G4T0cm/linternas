@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Traductor Linterna-Morse</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #f0c420;
+    }
+    textarea {
+      width: 90%;
+      height: 100px;
+      margin: 10px 0;
+      font-size: 14px;
+      border-radius: 8px;
+      border: none;
+      padding: 10px;
+      resize: none;
+    }
+    button {
+      background: #f0c420;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #ffde59;
+    }
+  </style>
+</head>
+<body>
+  <h1>Traductor Linterna de Gato y Wiky</h1>
+
+  <h3>Texto normal ➝ Linternas</h3>
+  <textarea id="inputText" placeholder="Escribe aquí tu texto..."></textarea>
+  <br>
+  <button onclick="toLinterna()">Traducir ➝</button>
+  <textarea id="outputLinterna" placeholder="Aquí aparecerá el código en linternas..."></textarea>
+
+  <h3>Linternas ➝ Texto normal</h3>
+  <textarea id="inputLinterna" placeholder="Escribe aquí tu código con :linterna: y :linterna1:"></textarea>
+  <br>
+  <button onclick="toTexto()">Traducir ⬅︎</button>
+  <textarea id="outputText" placeholder="Aquí aparecerá el texto traducido..."></textarea>
+
+  <script>
+    const morseCode = {
+      'A': '.-',    'B': '-...',  'C': '-.-.', 
+      'D': '-..',   'E': '.',     'F': '..-.',
+      'G': '--.',   'H': '....',  'I': '..',
+      'J': '.---',  'K': '-.-',   'L': '.-..',
+      'M': '--',    'N': '-.',    'O': '---',
+      'P': '.--.',  'Q': '--.-',  'R': '.-.',
+      'S': '...',   'T': '-',     'U': '..-',
+      'V': '...-',  'W': '.--',   'X': '-..-',
+      'Y': '-.--',  'Z': '--..',
+      '0': '-----', '1': '.----', '2': '..---',
+      '3': '...--', '4': '....-', '5': '.....',
+      '6': '-....', '7': '--...', '8': '---..',
+      '9': '----.'
+    };
+
+    // Invertir para traducción inversa
+    const morseToChar = {};
+    for (let char in morseCode) {
+      morseToChar[morseCode[char]] = char;
+    }
+
+    // Texto → Linterna
+    function toLinterna() {
+      const text = document.getElementById("inputText").value.toUpperCase();
+      const translation = text.split("").map(ch => {
+        if (ch === " ") return "   "; // espacio entre palabras
+        if (!morseCode[ch]) return "";
+        return morseCode[ch]
+          .replace(/\./g, ":linterna:")
+          .replace(/-/g, ":linterna1:");
+      }).join(" ");
+      document.getElementById("outputLinterna").value = translation;
+    }
+
+    // Linterna → Texto
+    function toTexto() {
+      const code = document.getElementById("inputLinterna").value.trim();
+      const words = code.split("   "); // separar por palabras
+      const translation = words.map(word => {
+        return word.split(" ").map(seq => {
+          if (!seq) return "";
+          const morse = seq
+            .replace(/:linterna1:/g, "-")
+            .replace(/:linterna:/g, ".");
+          return morseToChar[morse] || "";
+        }).join("");
+      }).join(" ");
+      document.getElementById("outputText").value = translation;
+    }
+  </script>
+</body>
+</html>
