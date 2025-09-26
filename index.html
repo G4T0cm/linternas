@@ -72,17 +72,15 @@
       '9': '----.'
     };
 
-    // Invertir para traducción inversa
     const morseToChar = {};
     for (let char in morseCode) {
       morseToChar[morseCode[char]] = char;
     }
 
-    // Texto → Linterna
     function toLinterna() {
       const text = document.getElementById("inputText").value.toUpperCase();
       const translation = text.split("").map(ch => {
-        if (ch === " ") return "   "; // espacio entre palabras
+        if (ch === " ") return "   ";
         if (!morseCode[ch]) return "";
         return morseCode[ch]
           .replace(/\./g, ":linterna:")
@@ -91,10 +89,9 @@
       document.getElementById("outputLinterna").value = translation;
     }
 
-    // Linterna → Texto
     function toTexto() {
       const code = document.getElementById("inputLinterna").value.trim();
-      const words = code.split("   "); // separar por palabras
+      const words = code.split("   ");
       const translation = words.map(word => {
         return word.split(" ").map(seq => {
           if (!seq) return "";
@@ -109,5 +106,6 @@
   </script>
 </body>
 </html>
+
 
 
