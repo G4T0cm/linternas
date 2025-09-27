@@ -53,7 +53,7 @@
   <textarea id="outputEmoji" placeholder="Aquí aparecerá el código en emojis..."></textarea>
 
   <h3>Emojis ➝ Texto normal</h3>
-  <textarea id="inputEmoji" placeholder="Escribe aquí tu código con :linterna:/:linterna1: o :Cat:/:cat2:"></textarea>
+  <textarea id="inputEmoji" placeholder="Escribe aquí tu código con :linterna:/:linterna1: o :cat:/:cat2:"></textarea>
   <br>
   <button onclick="toTexto()">Traducir ⬅︎</button>
   <textarea id="outputText" placeholder="Aquí aparecerá el texto traducido..."></textarea>
@@ -129,7 +129,7 @@ function toEmoji() {
           } else {
             morse = morse
               .replace(/:cat2:/g, "-")
-              .replace(/:Cat:/g, ".");
+              .replace(/:cat:/g, ".");
           }
           return morseToChar[morse] || "";
         }).join("");
@@ -149,6 +149,7 @@ function toEmoji() {
   </script>
 </body>
 </html>
+
 
 
 
