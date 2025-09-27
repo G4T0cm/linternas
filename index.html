@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
-<link rel="icon" href="favicon.png" type="image/png">
 <head>
   <meta charset="UTF-8">
-  <title>Traductor Linterna-Morse</title>
+  <title>Traductor Emoji-Morse</title>
   <link rel="icon" type="image/png" href="favicon.png">
   <style>
     body {
@@ -42,16 +41,19 @@
   </style>
 </head>
 <body>
-  <h1>Traductor Linterna de Gato y Wiky</h1>
+  <h1 id="title">Traductor Linterna-Morse 🔦</h1>
 
-  <h3>Texto normal ➝ Linternas</h3>
+  <button onclick="toggleMode()">🔁 Cambiar modo</button>
+
+  <h3>Texto normal ➝ Emojis</h3>
   <textarea id="inputText" placeholder="Escribe aquí tu texto..."></textarea>
   <br>
-  <button onclick="toLinterna()">Traducir ➝</button>
-  <textarea id="outputLinterna" placeholder="Aquí aparecerá el código en linternas..."></textarea>
+  <button onclick="toEmoji()">Traducir ➝</button>
+  <button onclick="copyOutput()">📋 Copiar</button>
+  <textarea id="outputEmoji" placeholder="Aquí aparecerá el código en emojis..."></textarea>
 
-  <h3>Linternas ➝ Texto normal</h3>
-  <textarea id="inputLinterna" placeholder="Escribe aquí tu código con :linterna: y :linterna1:"></textarea>
+  <h3>Emojis ➝ Texto normal</h3>
+  <textarea id="inputEmoji" placeholder="Escribe aquí tu código con :linterna:/:linterna1: o :Cat:/:cat2:"></textarea>
   <br>
   <button onclick="toTexto()">Traducir ⬅︎</button>
   <textarea id="outputText" placeholder="Aquí aparecerá el texto traducido..."></textarea>
@@ -78,37 +80,73 @@
       morseToChar[morseCode[char]] = char;
     }
 
-    function toLinterna() {
+    // Modo actual: "linterna" o "cat"
+    let mode = "linterna";
+
+    function toggleMode() {
+      mode = (mode === "linterna") ? "cat" : "linterna";
+      const title = document.getElementById("title");
+      if (mode === "linterna") {
+        title.textContent = "Traductor Linterna-Morse 🔦";
+      } else {
+        title.textContent = "Traductor Cat-Morse 🐱";
+      }
+    }
+
+    // Texto → Emojis
+    function toEmoji() {
       const text = document.getElementById("inputText").value.toUpperCase();
       const translation = text.split("").map(ch => {
         if (ch === " ") return "   ";
         if (!morseCode[ch]) return "";
-        return morseCode[ch]
-          .replace(/\./g, ":linterna:")
-          .replace(/-/g, ":linterna1:");
+        let converted = morseCode[ch];
+        if (mode === "linterna") {
+          converted = converted
+            .replace(/\./g, ":linterna:")
+            .replace(/-/g, ":linterna1:");
+        } else {
+          converted = converted
+            .replace(/\./g, ":Cat:")
+            .replace(/-/g, ":cat2:");
+        }
+        return converted;
       }).join(" ");
-      document.getElementById("outputLinterna").value = translation;
+      document.getElementById("outputEmoji").value = translation;
     }
 
+    // Emojis → Texto
     function toTexto() {
-      const code = document.getElementById("inputLinterna").value.trim();
+      const code = document.getElementById("inputEmoji").value.trim();
       const words = code.split("   ");
       const translation = words.map(word => {
         return word.split(" ").map(seq => {
           if (!seq) return "";
-          const morse = seq
-            .replace(/:linterna1:/g, "-")
-            .replace(/:linterna:/g, ".");
+          let morse = seq;
+          if (mode === "linterna") {
+            morse = morse
+              .replace(/:linterna1:/g, "-")
+              .replace(/:linterna:/g, ".");
+          } else {
+            morse = morse
+              .replace(/:cat2:/g, "-")
+              .replace(/:Cat:/g, ".");
+          }
           return morseToChar[morse] || "";
         }).join("");
       }).join(" ");
       document.getElementById("outputText").value = translation;
     }
+
+    // Copiar al portapapeles
+    function copyOutput() {
+      const output = document.getElementById("outputEmoji");
+      output.select();
+      output.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(output.value)
+        .then(() => alert("¡Copiado al portapapeles!"))
+        .catch(() => alert("Error al copiar"));
+    }
   </script>
 </body>
 </html>
-
-
-
-
 
