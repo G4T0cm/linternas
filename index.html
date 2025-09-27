@@ -102,15 +102,15 @@ function toEmoji() {
     let converted = morseCode[ch];
     if (mode === "linterna") {
       converted = converted
-        .replace(/\./g, ":linterna:")
-        .replace(/-/g, ":linterna1:");
+        .replace(/\./g, ":linterna: ")
+        .replace(/-/g, ":linterna1: ");
     } else {
       converted = converted
-        .replace(/\./g, ":Cat:")
-        .replace(/-/g, ":cat2:");
+        .replace(/\./g, ":Cat: ")
+        .replace(/-/g, ":cat2: ");
     }
-    return converted;
-  }).join(" "); // <- espacio entre letras
+    return converted.trim(); // quita espacio extra al final
+  }).join(" ");
   document.getElementById("outputEmoji").value = translation;
 }
 
@@ -149,5 +149,6 @@ function toEmoji() {
   </script>
 </body>
 </html>
+
 
 
