@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Traductor Emoji-Morse</title>
+  <title>Traductor Linterna-Morse</title>
   <link rel="icon" type="image/png" href="favicon.png">
   <style>
     body {
@@ -38,48 +38,33 @@
     button:hover {
       background: #ffde59;
     }
-    #modeDisplay {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #58a6ff;
-    }
   </style>
 </head>
 <body>
-  <h1 id="title">Traductor Linterna-Morse 🔦</h1>
+  <h1>Traductor Linterna de Gato y Wiky</h1>
 
-  <!-- Botón para alternar modos -->
-  <button onclick="toggleMode()">🔁 Cambiar modo</button>
-  <div id="modeDisplay">Modo actual: Linterna</div>
-
-  <h3>Texto normal ➝ Emojis</h3>
+  <h3>Texto normal ➝ Linternas</h3>
   <textarea id="inputText" placeholder="Escribe aquí tu texto..."></textarea>
   <br>
-  <button onclick="toEmoji()">Traducir ➝</button>
-  <button onclick="copyOutput()">📋 Copiar</button>
-  <textarea id="outputEmoji" placeholder="Aquí aparecerá el código en emojis..."></textarea>
+  <button onclick="toLinterna()">Traducir ➝</button>
+  <textarea id="outputLinterna" placeholder="Aquí aparecerá el código en linternas..."></textarea>
 
-  <h3>Emojis ➝ Texto normal</h3>
-  <textarea id="inputEmoji" placeholder="Escribe aquí tu código con :linterna:/:linterna1: o :Cat:/:cat2:"></textarea>
+  <h3>Linternas ➝ Texto normal</h3>
+  <textarea id="inputLinterna" placeholder="Escribe aquí tu código con :linterna: y :linterna1:"></textarea>
   <br>
   <button onclick="toTexto()">Traducir ⬅︎</button>
   <textarea id="outputText" placeholder="Aquí aparecerá el texto traducido..."></textarea>
 
   <script>
     const morseCode = {
-      'A': '.-',    'B': '-...',  'C': '-.-.', 
-      'D': '-..',   'E': '.',     'F': '..-.',
-      'G': '--.',   'H': '....',  'I': '..',
-      'J': '.---',  'K': '-.-',   'L': '.-..',
-      'M': '--',    'N': '-.',    'O': '---',
-      'P': '.--.',  'Q': '--.-',  'R': '.-.',
-      'S': '...',   'T': '-',     'U': '..-',
-      'V': '...-',  'W': '.--',   'X': '-..-',
-      'Y': '-.--',  'Z': '--..',
-      '0': '-----', '1': '.----', '2': '..---',
-      '3': '...--', '4': '....-', '5': '.....',
-      '6': '-....', '7': '--...', '8': '---..',
-      '9': '----.'
+      'A': '.-',   'B': '-...', 'C': '-.-.', 'D': '-..',  'E': '.',
+      'F': '..-.', 'G': '--.',  'H': '....', 'I': '..',   'J': '.---',
+      'K': '-.-',  'L': '.-..', 'M': '--',   'N': '-.',   'O': '---',
+      'P': '.--.', 'Q': '--.-', 'R': '.-.',  'S': '...',  'T': '-',
+      'U': '..-',  'V': '...-', 'W': '.--',  'X': '-..-', 'Y': '-.--',
+      'Z': '--..',
+      '0': '-----','1': '.----','2': '..---','3': '...--','4': '....-',
+      '5': '.....','6': '-....','7': '--...','8': '---..','9': '----.'
     };
 
     const morseToChar = {};
@@ -87,74 +72,31 @@
       morseToChar[morseCode[char]] = char;
     }
 
-    // Modo actual: "linterna" o "cat"
-    let mode = "linterna";
-
-    function toggleMode() {
-      mode = (mode === "linterna") ? "cat" : "linterna";
-      const title = document.getElementById("title");
-      const modeDisplay = document.getElementById("modeDisplay");
-      if (mode === "linterna") {
-        title.textContent = "Traductor Linterna-Morse 🔦";
-        modeDisplay.textContent = "Modo actual: Linterna";
-      } else {
-        title.textContent = "Traductor Cat-Morse 🐱";
-        modeDisplay.textContent = "Modo actual: cat";
-      }
-    }
-
-    // Texto → Emojis
-    function toEmoji() {
+    function toLinterna() {
       const text = document.getElementById("inputText").value.toUpperCase();
       const translation = text.split("").map(ch => {
-        if (ch === " ") return "   ";
+        if (ch === " ") return " ";
         if (!morseCode[ch]) return "";
-        let converted = morseCode[ch];
-        if (mode === "linterna") {
-          converted = converted
-            .replace(/\./g, ":linterna:")
-            .replace(/-/g, ":linterna1:");
-        } else {
-          converted = converted
-            .replace(/\./g, ":cat:")
-            .replace(/-/g, ":cat2:");
-        }
-        return converted;
+        return morseCode[ch]
+          .replace(/\./g, ":linterna:")
+          .replace(/-/g, ":linterna1:");
       }).join(" ");
-      document.getElementById("outputEmoji").value = translation;
+      document.getElementById("outputLinterna").value = translation;
     }
 
-    // Emojis → Texto
     function toTexto() {
-      const code = document.getElementById("inputEmoji").value.trim();
-      const words = code.split("   ");
+      const code = document.getElementById("inputLinterna").value.trim();
+      const words = code.split(" ");
       const translation = words.map(word => {
         return word.split(" ").map(seq => {
           if (!seq) return "";
-          let morse = seq;
-          if (mode === "linterna") {
-            morse = morse
-              .replace(/:linterna1:/g, "-")
-              .replace(/:linterna:/g, ".");
-          } else {
-            morse = morse
-              .replace(/:cat2:/g, "-")
-              .replace(/:cat:/g, ".");
-          }
+          const morse = seq
+            .replace(/:linterna1:/g, "-")
+            .replace(/:linterna:/g, ".");
           return morseToChar[morse] || "";
         }).join("");
       }).join(" ");
       document.getElementById("outputText").value = translation;
-    }
-
-    // Copiar al portapapeles
-    function copyOutput() {
-      const output = document.getElementById("outputEmoji");
-      output.select();
-      output.setSelectionRange(0, 99999);
-      navigator.clipboard.writeText(output.value)
-        .then(() => alert("¡Copiado al portapapeles!"))
-        .catch(() => alert("Error al copiar"));
     }
   </script>
 </body>
