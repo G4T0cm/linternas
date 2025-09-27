@@ -93,26 +93,26 @@
       }
     }
 
-    // Texto → Emojis
-    function toEmoji() {
-      const text = document.getElementById("inputText").value.toUpperCase();
-      const translation = text.split("").map(ch => {
-        if (ch === " ") return "   ";
-        if (!morseCode[ch]) return "";
-        let converted = morseCode[ch];
-        if (mode === "linterna") {
-          converted = converted
-            .replace(/\./g, ":linterna:")
-            .replace(/-/g, ":linterna1:");
-        } else {
-          converted = converted
-            .replace(/\./g, ":Cat:")
-            .replace(/-/g, ":cat2:");
-        }
-        return converted;
-      }).join(" ");
-      document.getElementById("outputEmoji").value = translation;
+// Texto → Emojis
+function toEmoji() {
+  const text = document.getElementById("inputText").value.toUpperCase();
+  const translation = text.split("").map(ch => {
+    if (ch === " ") return "    "; // 4 espacios para separar palabras
+    if (!morseCode[ch]) return "";
+    let converted = morseCode[ch];
+    if (mode === "linterna") {
+      converted = converted
+        .replace(/\./g, ":linterna:")
+        .replace(/-/g, ":linterna1:");
+    } else {
+      converted = converted
+        .replace(/\./g, ":Cat:")
+        .replace(/-/g, ":cat2:");
     }
+    return converted;
+  }).join(" "); // <- espacio entre letras
+  document.getElementById("outputEmoji").value = translation;
+}
 
     // Emojis → Texto
     function toTexto() {
@@ -149,4 +149,5 @@
   </script>
 </body>
 </html>
+
 
